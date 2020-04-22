@@ -35,7 +35,16 @@ class AccountMove(models.Model):
     def write(self, vals):
         # Add _check_lock_date for write of account.move,
         # as it is not done by default
-        self._check_lock_date()
+        # OF Modification OpenFire
+        unlocked_fields = {
+            'to_be_reversed',
+            'reversal_id'
+        }
+        check_lock = bool(set(vals.iterkeys()) - unlocked_fields)
+        if check_lock:
+            self._check_lock_date()
         result = super(AccountMove, self).write(vals)
-        self._check_lock_date()
+        if check_lock:
+            self._check_lock_date()
+        # OF Modification OpenFire
         return result
