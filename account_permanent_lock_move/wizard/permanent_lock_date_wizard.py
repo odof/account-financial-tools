@@ -9,7 +9,7 @@ class PermanentLockDateWizard(models.TransientModel):
     _name = 'permanent.lock.date.wizard'
     _description = 'Wizard to update the permanent lock date'
 
-    lock_date = fields.Date(string="New Permanent Lock Date", required=True)
+    lock_date = fields.Date(string="New Permanent Lock Date")
     company_id = fields.Many2one(
         comodel_name='res.company',
         string='Company', required=True, readonly=True)
