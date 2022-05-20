@@ -4,7 +4,8 @@
   <menuitem id="menu_finance_assets"
             name="Assets"
             parent="account.menu_finance"
-            sequence="9"/>
+            sequence="9"
+            groups="account.group_account_user"/>
 
   <menuitem id="account_asset_menu"
             action="account_asset_action"
