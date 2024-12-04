@@ -29,7 +29,11 @@ msgstr ""
 msgid ""
 "Chronology Error. Please confirm older draft invoices before %s and try "
 "again."
-msgstr ""
+msgstr "Erreur de chronologie de date sur la facture. La date de cette "
+"facture doit être postérieure ou égale à la dernière facture validée ou "
+"en brouillon.\n\nPour continuer, confirmez ou supprimez les factures en "
+"brouillon avec une date antérieure au %s.\n\nAstuce : laissez vide le "
+"champ date de facturation sur les factures brouillon."
 
 #. module: account_invoice_constraint_chronology
 #: code:addons/account_invoice_constraint_chronology/model/account_invoice.py:48

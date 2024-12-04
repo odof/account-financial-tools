@@ -13,6 +13,9 @@ class AccountInvoice(models.Model):
     def action_move_create(self):
         previously_validated = self.filtered(lambda inv: inv.move_name)
         res = super(AccountInvoice, self).action_move_create()
+        # OF Modification OpenFire
+        lang = self.env['res.lang']._lang_get(self.env.lang or 'fr_FR')
+        # OF Fin modification OpenFire
         for inv in self:
             if inv.journal_id.check_chronology:
                 invoices = \
@@ -28,10 +31,13 @@ class AccountInvoice(models.Model):
                         from_string(inv.date_invoice)
                     date_invoice_tz = fields\
                         .Date.context_today(self, date_invoice_format)
+                    # OF Modification OpenFire
+                    date = fields.Date.from_string(date_invoice_tz).strftime(lang.date_format)
                     raise UserError(_("Chronology Error. "
                                       "Please confirm older draft "
                                       "invoices before %s and try again.")
-                                    % date_invoice_tz)
+                                    % date)
+                    # OF Fin modification OpenFire
                 if inv not in previously_validated:
                     invoices = self.search([('state', 'in', ['open', 'paid']),
                                             ('date_invoice', '>',
