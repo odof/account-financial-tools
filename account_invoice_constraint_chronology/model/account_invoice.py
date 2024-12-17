@@ -33,26 +33,38 @@ class AccountInvoice(models.Model):
                         .Date.context_today(self, date_invoice_format)
                     # OF Modification OpenFire
                     date = fields.Date.from_string(date_invoice_tz).strftime(lang.date_format)
-                    raise UserError(_("Chronology Error. "
-                                      "Please confirm older draft "
-                                      "invoices before %s and try again.")
-                                    % date)
+                    raise UserError(
+                        _(
+                            "Chronology Error. Please confirm older draft invoices before %s and try again."
+                        ) %
+                        date
+                    )
                     # OF Fin modification OpenFire
                 if inv not in previously_validated:
-                    invoices = self.search([('state', 'in', ['open', 'paid']),
-                                            ('date_invoice', '>',
-                                             inv.date_invoice),
-                                            ('journal_id', '=',
-                                             inv.journal_id.id)],
-                                           limit=1)
+                    invoices = self.search(
+                        [
+                            ('state', 'in', ['open', 'paid']),
+                            ('date_invoice', '>', inv.date_invoice),
+                            ('journal_id', '=', inv.journal_id.id)
+                        ],
+                        limit=1,
+                        order='date_invoice DESC'
+                    )
 
                     if invoices:
                         date_invoice_format = fields.Date.\
-                            from_string(inv.date_invoice)
+                            from_string(invoices.date_invoice)
+
                         date_invoice_tz = fields\
                             .Date.context_today(self, date_invoice_format)
-                        raise UserError(_("Chronology Error. "
-                                          "There exist at least one invoice "
-                                          "with a date posterior to %s.") %
-                                        date_invoice_tz)
+                        # OF Modification OpenFire
+                        date = fields.Date.from_string(date_invoice_tz).strftime(lang.date_format)
+                        raise UserError(
+                            _(
+                                "Chronology Error. There exist at least one invoice with a date posterior to %s."
+                            ) %
+                            date
+                        )
+                        # OF Fin modification OpenFire
+
         return res
